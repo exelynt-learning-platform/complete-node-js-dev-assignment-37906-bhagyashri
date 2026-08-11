@@ -1,0 +1,295 @@
+Module: GitHub Collaboration & Best Practices
+
+Assignment Title:
+Collaborating on GitHub and Following Best Practices
+
+1. Create a README.md File
+
+Create a README.md file in the root directory of the project.
+
+The README file should provide clear information about the project.
+
+Example structure:
+
+# Project Name
+
+## Description
+Briefly explain what the project does and its purpose.
+
+## Features
+- Feature 1
+- Feature 2
+- Feature 3
+
+## Technologies Used
+- React
+- JavaScript
+- HTML
+- CSS
+
+## Installation
+
+npm install
+
+## Running the Project
+
+npm run dev
+
+## Usage
+Explain how users can use the application.
+
+## Author
+Student Name
+
+A good README helps other developers understand, install, and use the project.
+
+2. Create a .gitignore File
+
+The .gitignore file tells Git which files and folders should not be tracked.
+
+For a React project, common entries include:
+
+node_modules/
+dist/
+.env
+.env.local
+.DS_Store
+
+Example:
+
+node_modules/
+dist/
+.env
+.env.local
+.DS_Store
+
+The node_modules folder should not normally be committed because it contains installed dependencies that can be recreated using the package.json file.
+
+Environment files such as .env may contain sensitive configuration values and should not be committed.
+
+3. Basic GitHub Collaboration Workflow
+
+A common GitHub workflow is:
+
+1. Clone the repository.
+2. Create a feature branch.
+3. Make the required changes.
+4. Test the changes.
+5. Stage the files.
+6. Commit the changes with a meaningful message.
+7. Push the feature branch to GitHub.
+8. Create a Pull Request.
+9. Ask team members to review the changes.
+10. Resolve review comments or conflicts.
+11. Merge the Pull Request into the main branch.
+12. Pull the latest changes before starting new work.
+
+Example commands:
+
+git clone <repository-url>
+
+git switch -c feature-user-profile
+
+git status
+
+git add .
+
+git commit -m "Add user profile page"
+
+git push -u origin feature-user-profile
+
+4. GitHub Issues
+
+GitHub Issues are used to track tasks, bugs, feature requests, and improvements.
+
+Examples:
+
+- Fix login validation
+- Add student search functionality
+- Improve dashboard layout
+- Fix mobile navigation issue
+
+A team member can create an issue with a title and description. Developers can then work on the issue and reference it in their commits or Pull Requests.
+
+Issues help teams organize work and track project requirements.
+
+5. Pull Requests
+
+A Pull Request (PR) is used to propose changes from one branch to another.
+
+For example:
+
+feature-user-profile → main
+
+A Pull Request allows team members to:
+
+- Review the code.
+- Discuss changes.
+- Suggest improvements.
+- Identify possible problems.
+- Run automated checks.
+- Approve or request changes.
+
+After the changes are reviewed and approved, the Pull Request can be merged into the main branch.
+
+6. Git Best Practices for React Projects
+
+Use Meaningful Commit Messages
+
+Instead of:
+
+git commit -m "changes"
+
+Use:
+
+git commit -m "Add student dashboard"
+
+Meaningful messages make the project history easier to understand.
+
+Create Feature Branches
+
+Avoid making all changes directly on the main branch.
+
+Example:
+
+git switch -c feature-student-dashboard
+
+Keep Commits Small
+
+Make focused commits that represent a specific change.
+
+For example:
+
+git commit -m "Add student search"
+git commit -m "Add student filtering"
+
+Do Not Commit node_modules
+
+Add the following to .gitignore:
+
+node_modules/
+
+Do Not Commit Environment Variables
+
+Add environment files to .gitignore:
+
+.env
+.env.local
+
+Never commit passwords, API keys, tokens, or other sensitive information.
+
+Review Changes Before Committing
+
+Use:
+
+git status
+
+and:
+
+git diff
+
+These commands help identify which files were changed before creating a commit.
+
+Pull Latest Changes
+
+Before starting new work, update the local main branch:
+
+git switch main
+git pull origin main
+
+Use Pull Requests
+
+Feature changes should normally be reviewed through Pull Requests before being merged into the main branch.
+
+Keep Repository Structure Organized
+
+A React project should have a clear and consistent structure.
+
+Example:
+
+project/
+│
+├── public/
+├── src/
+│   ├── components/
+│   ├── pages/
+│   ├── hooks/
+│   ├── services/
+│   └── utils/
+│
+├── .gitignore
+├── README.md
+├── package.json
+└── package-lock.json
+
+7. Recommended GitHub Repository Structure
+
+A well-organized repository should contain:
+
+README.md
+.gitignore
+package.json
+src/
+public/
+
+The repository should not contain unnecessary files such as:
+
+node_modules/
+temporary files
+build output
+personal configuration files
+secret credentials
+
+8. Example React GitHub Workflow
+
+Suppose a developer needs to create a Student Dashboard.
+
+First, update the main branch:
+
+git switch main
+git pull origin main
+
+Create a feature branch:
+
+git switch -c feature-student-dashboard
+
+Develop the feature and test it.
+
+Check changes:
+
+git status
+git diff
+
+Stage the changes:
+
+git add .
+
+Commit:
+
+git commit -m "Add student dashboard"
+
+Push the branch:
+
+git push -u origin feature-student-dashboard
+
+Create a Pull Request on GitHub.
+
+After review and approval, merge the Pull Request into main.
+
+Finally, update the local main branch:
+
+git switch main
+git pull origin main
+
+9. Submission Requirements
+
+Students should submit:
+
+- Screenshot of the README.md file.
+- Screenshot of the .gitignore file.
+- Screenshot of the GitHub repository structure.
+- Screenshot showing a feature branch.
+- Screenshot of a Pull Request.
+- Screenshot of a GitHub Issue.
+- Relevant Git command outputs.
+- Repository link, if required by the instructor.
