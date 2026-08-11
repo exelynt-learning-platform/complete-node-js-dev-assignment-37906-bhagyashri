@@ -1,0 +1,222 @@
+Module: Branching & Merging
+
+Assignment Title:
+Working with Branches and Merging Changes
+
+1. Create or Use a Git Repository
+
+Create a new repository or use an existing Git repository.
+
+Example:
+
+mkdir branching-practice
+cd branching-practice
+git init
+
+Create an initial file:
+
+touch index.txt
+
+Add some content to the file and commit it:
+
+git add index.txt
+git commit -m "Add initial project file"
+
+2. Check Existing Branches
+
+Use the following command:
+
+git branch
+
+This command displays the branches available in the repository.
+
+The current branch is marked with an asterisk (*).
+
+3. Create a New Branch
+
+Create a feature branch using:
+
+git branch feature-update
+
+The command creates a new branch named feature-update.
+
+To create and switch to the branch at the same time, use:
+
+git switch -c feature-update
+
+4. Switch Between Branches
+
+To switch to the feature branch:
+
+git switch feature-update
+
+To return to the main branch:
+
+git switch main
+
+Older Git versions may also use:
+
+git checkout feature-update
+git checkout main
+
+5. Make Changes in the Feature Branch
+
+Switch to the feature branch:
+
+git switch feature-update
+
+Create or modify a file:
+
+touch feature.txt
+
+Add some content to feature.txt.
+
+Check the changes:
+
+git status
+
+Stage the file:
+
+git add feature.txt
+
+Commit the changes:
+
+git commit -m "Add feature update"
+
+The change now exists in the feature-update branch and does not yet exist in the main branch.
+
+6. Switch Back to Main
+
+Run:
+
+git switch main
+
+Check the project files:
+
+ls
+
+The feature.txt file will not be present in the main branch if it was created only in the feature branch.
+
+7. Merge the Feature Branch
+
+While on the main branch, run:
+
+git merge feature-update
+
+Git will combine the changes from feature-update into the main branch.
+
+If the merge is successful, Git will display a successful merge message.
+
+8. Verify the Merge
+
+Check the project status:
+
+git status
+
+View the commit history:
+
+git log --oneline
+
+The commits from the feature-update branch should now be part of the main branch history.
+
+9. Understanding Merge Conflicts
+
+A merge conflict occurs when Git cannot automatically combine changes from two branches.
+
+For example:
+
+Main branch:
+Hello from main branch.
+
+Feature branch:
+Hello from feature branch.
+
+If both branches modify the same part of the same file differently, Git may not know which version should be kept.
+
+Git marks the conflicting section with markers such as:
+
+<<<<<<< HEAD
+Hello from main branch.
+=======
+Hello from feature branch.
+>>>>>>> feature-update
+
+The developer must manually decide which content should remain.
+
+10. Resolving a Merge Conflict
+
+To resolve the conflict:
+
+1. Open the conflicted file.
+2. Review the conflicting changes.
+3. Remove the Git conflict markers.
+4. Keep the correct content.
+5. Save the file.
+6. Stage the resolved file.
+
+Example:
+
+git add index.txt
+
+Complete the merge with:
+
+git commit -m "Resolve merge conflict"
+
+The conflict is now resolved and the merge is completed.
+
+11. Useful Branch Commands
+
+Create a branch:
+
+git branch branch-name
+
+List branches:
+
+git branch
+
+Switch branches:
+
+git switch branch-name
+
+Create and switch to a branch:
+
+git switch -c branch-name
+
+Merge a branch:
+
+git merge branch-name
+
+Delete a merged branch:
+
+git branch -d branch-name
+
+12. Branching Workflow
+
+The basic branching and merging workflow is:
+
+Main Branch
+     ↓
+Create Feature Branch
+     ↓
+Switch to Feature Branch
+     ↓
+Make Changes
+     ↓
+Commit Changes
+     ↓
+Switch to Main
+     ↓
+Merge Feature Branch
+     ↓
+Updated Main Branch
+
+13. Submission Requirements
+
+Students should submit:
+
+- Screenshot showing branch creation.
+- Screenshot showing branch switching.
+- Screenshot showing changes made in the feature branch.
+- Screenshot showing the merge command.
+- Screenshot or command output showing the successful merge.
+- Brief explanation of merge conflicts and their resolution.
