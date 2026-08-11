@@ -1,0 +1,145 @@
+Module: Introduction to GitHub
+
+Assignment Title:
+Getting Started with GitHub and Remote Repositories
+
+1. Create a GitHub Account
+
+Open the GitHub website and create an account using a valid email address.
+
+After creating the account, log in to GitHub and verify that the account is accessible.
+
+2. Create a Local Git Repository
+
+Create a project folder on the computer:
+
+mkdir github-practice
+cd github-practice
+
+Initialize Git:
+
+git init
+
+Create a sample file:
+
+touch README.md
+
+Add some content to the file.
+
+3. Make the Initial Commit
+
+Check the repository status:
+
+git status
+
+Stage the file:
+
+git add README.md
+
+Create the first commit:
+
+git commit -m "Add project README"
+
+The local repository is now ready to be connected to GitHub.
+
+4. Create a Remote Repository on GitHub
+
+Log in to GitHub and create a new repository.
+
+Example repository name:
+
+github-practice
+
+When creating the repository, students can keep it empty initially so that the existing local repository can be connected easily.
+
+The GitHub repository will act as the remote repository for the local project.
+
+5. Connect the Local Repository to GitHub
+
+Copy the HTTPS or SSH repository URL provided by GitHub.
+
+Add the GitHub repository as a remote:
+
+git remote add origin https://github.com/USERNAME/github-practice.git
+
+Replace USERNAME with the student's GitHub username.
+
+6. Verify the Remote Repository
+
+Run:
+
+git remote -v
+
+The command should display the GitHub repository URL for fetch and push operations.
+
+Example:
+
+origin  https://github.com/USERNAME/github-practice.git (fetch)
+origin  https://github.com/USERNAME/github-practice.git (push)
+
+7. Rename the Local Branch to Main
+
+If the current branch has a different name, rename it to main:
+
+git branch -M main
+
+8. Push the Local Repository to GitHub
+
+Upload the local commits to the GitHub repository:
+
+git push -u origin main
+
+The -u option sets origin/main as the default upstream branch for future pushes.
+
+After a successful push, refresh the GitHub repository page. The README.md file should be visible in the remote repository.
+
+9. Verify the Connection
+
+Run:
+
+git remote -v
+
+Then check the GitHub repository in the browser.
+
+The local project and GitHub repository are now connected.
+
+10. Common Commands Used
+
+Initialize repository:
+
+git init
+
+Check repository status:
+
+git status
+
+Stage files:
+
+git add .
+
+Create a commit:
+
+git commit -m "Commit message"
+
+Add remote repository:
+
+git remote add origin <repository-url>
+
+Check remote:
+
+git remote -v
+
+Push changes:
+
+git push -u origin main
+
+11. Submission Requirements
+
+Students should submit:
+
+- Screenshot of the GitHub account.
+- Screenshot of the created GitHub repository.
+- Screenshot showing git remote -v.
+- Screenshot showing the git push command and successful output.
+- Screenshot of the files visible in the GitHub repository.
+- Brief explanation of how the local repository was connected to GitHub.
