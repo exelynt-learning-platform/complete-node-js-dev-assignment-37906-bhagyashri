@@ -1,1 +1,1 @@
-Module: Tracking Changes with Git
+If creating a new repository:
