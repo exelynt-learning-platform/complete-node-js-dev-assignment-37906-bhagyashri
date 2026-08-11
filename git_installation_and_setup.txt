@@ -1,0 +1,80 @@
+Module: Git Installation & Setup
+
+Assignment Title:
+Setting Up Git and Understanding the Git Environment
+
+1. Install Git
+
+Git can be installed according to the operating system.
+
+Windows:
+Download and install Git from the official Git website.
+
+macOS:
+Git can be installed using Xcode Command Line Tools or Homebrew.
+
+Linux:
+Git can be installed using the package manager available for the Linux distribution.
+
+2. Verify Git Installation
+
+After installation, open Git Bash or Terminal and run:
+
+git --version
+
+If Git is installed correctly, the terminal will display the installed Git version.
+
+Example:
+
+git version 2.x.x
+
+3. Configure Global Username
+
+Set the Git username using:
+
+git config --global user.name "Your Name"
+
+To verify the configured username, run:
+
+git config --global user.name
+
+4. Configure Global Email
+
+Set the Git email using:
+
+git config --global user.email "your-email@example.com"
+
+To verify the configured email, run:
+
+git config --global user.email
+
+5. Verify Git Configuration
+
+Run the following command to view the complete Git configuration:
+
+git config --global --list
+
+The output should display the configured username and email.
+
+6. Demonstrate Git Bash or Terminal Usage
+
+Open Git Bash on Windows or Terminal on macOS/Linux.
+
+Run basic Git commands such as:
+
+git --version
+git config --global user.name
+git config --global user.email
+git config --global --list
+
+Students should take screenshots showing the commands and their outputs.
+
+7. Submission Requirements
+
+Students should submit:
+
+- Screenshot of Git installation/version verification.
+- Screenshot showing configured Git username.
+- Screenshot showing configured Git email.
+- Screenshot showing Git Bash or Terminal usage.
+- Brief explanation of each step.
