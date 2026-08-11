@@ -1,0 +1,131 @@
+Module: Git Repository Basics
+
+Assignment Title:
+Create and Understand a Git Repository
+
+1. Create a New Project Folder
+
+Create a new folder for the project.
+
+Example:
+
+mkdir git-practice
+cd git-practice
+
+The project folder will contain the files that will be managed using Git.
+
+2. Initialize a Git Repository
+
+Run the following command inside the project folder:
+
+git init
+
+This command initializes a new Git repository.
+
+After successful initialization, Git creates a hidden .git folder inside the project directory.
+
+3. Understand the .git Folder
+
+The .git folder contains the internal information required by Git to manage the repository.
+
+It stores information such as:
+
+- Commit history
+- Branch information
+- Repository configuration
+- Staging information
+- Git metadata
+
+The .git folder should not normally be manually modified or deleted because doing so can damage the repository.
+
+To check the hidden files, use:
+
+ls -la
+
+4. Create a New File
+
+Create a file named:
+
+index.txt
+
+Example command:
+
+touch index.txt
+
+Add some sample content to the file, such as:
+
+This is my first Git repository.
+
+5. Check Repository Status
+
+Run:
+
+git status
+
+Git will show that index.txt is an untracked file.
+
+Example:
+
+Untracked files:
+    index.txt
+
+An untracked file is a file that exists in the project directory but has not yet been added to Git's staging area.
+
+6. Three Git File States
+
+Git commonly manages files through three important states:
+
+Working Directory:
+This is where files are created or modified by the developer. Changes made to files exist in the working directory before they are staged.
+
+Staging Area:
+The staging area contains changes that have been selected for the next commit.
+
+A file can be added to the staging area using:
+
+git add index.txt
+
+Repository:
+The repository contains the committed version of the project.
+
+The staged file can be committed using:
+
+git commit -m "Add index file"
+
+The basic workflow is:
+
+Working Directory
+       ↓
+Staging Area
+       ↓
+Git Repository
+
+7. Verify the Repository
+
+Run:
+
+git status
+
+After committing the file, Git should show that the working tree is clean.
+
+The repository can also be checked using:
+
+git log
+
+This command displays the commit history.
+
+8. Steps to Demonstrate
+
+Students should perform the following steps in order:
+
+1. Create a project folder.
+2. Navigate into the project folder.
+3. Run git init.
+4. Identify the .git folder.
+5. Create index.txt.
+6. Run git status.
+7. Observe the untracked file.
+8. Run git add index.txt.
+9. Check git status again.
+10. Commit the file using git commit.
+11. Run git status and git log.
