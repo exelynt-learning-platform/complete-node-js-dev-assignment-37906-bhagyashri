@@ -1,1 +1,171 @@
+Module: Tracking Changes with Git
+
+Assignment Title:
+Tracking and Committing Changes in Git
+
+1. Create or Use an Existing Repository
+
+Create a new Git repository or use an existing repository.
+
 If creating a new repository:
+
+mkdir git-change-tracking
+cd git-change-tracking
+git init
+
+2. Create at Least Two Files
+
+Create two files inside the repository.
+
+Example:
+
+touch index.txt
+touch notes.txt
+
+Add some content to both files.
+
+Example content for index.txt:
+
+This is my first project file.
+
+Example content for notes.txt:
+
+Git helps track changes in project files.
+
+3. Check File Status
+
+Run:
+
+git status
+
+Git will show the newly created files as untracked files.
+
+4. Stage the Files
+
+Add the files to the staging area using:
+
+git add index.txt notes.txt
+
+Check the status again:
+
+git status
+
+The files should now appear under "Changes to be committed."
+
+5. Create the First Commit
+
+Commit the staged files with a meaningful commit message:
+
+git commit -m "Add initial project files"
+
+A good commit message should clearly describe the changes made.
+
+6. Make Additional Changes
+
+Modify one of the existing files.
+
+For example, add another line to notes.txt:
+
+Git allows developers to track changes made to files.
+
+Then check the changes:
+
+git status
+
+Git will show notes.txt as modified.
+
+7. Stage and Commit the Changes
+
+Stage the modified file:
+
+git add notes.txt
+
+Create another commit:
+
+git commit -m "Update Git notes"
+
+This creates a second commit in the repository.
+
+8. Create Another Commit
+
+Make another change, such as adding a new file:
+
+touch commands.txt
+
+Add some Git commands to the file.
+
+Stage the file:
+
+git add commands.txt
+
+Commit the change:
+
+git commit -m "Add Git command reference"
+
+The repository now contains multiple commits.
+
+9. View Commit History
+
+Use the following command to view the commit history:
+
+git log
+
+The output will display information such as:
+
+- Commit ID
+- Author
+- Date
+- Commit message
+
+For a shorter history, use:
+
+git log --oneline
+
+This displays each commit in a compact format.
+
+10. Common Beginner Mistakes
+
+Mistake 1: Forgetting to Stage Changes
+
+A common mistake is modifying a file and directly running git commit without staging the changes.
+
+Example:
+
+git commit -m "Update file"
+
+If the changes have not been staged, Git will not include those changes in the commit.
+
+Correct approach:
+
+git add filename
+git commit -m "Update file"
+
+Mistake 2: Using Unclear Commit Messages
+
+Messages such as:
+
+git commit -m "changes"
+git commit -m "update"
+git commit -m "done"
+
+do not clearly explain what was changed.
+
+A better message is:
+
+git commit -m "Update customer validation logic"
+
+Meaningful commit messages make the project history easier to understand.
+
+11. Git Workflow
+
+The basic workflow for tracking changes is:
+
+Create or Modify Files
+        ↓
+git status
+        ↓
+git add
+        ↓
+git commit
+        ↓
+git log
