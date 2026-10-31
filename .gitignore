@@ -1,13 +1,7 @@
-# Node dependencies
 node_modules/
-
-# Environment files
 .env
-.env.*
+*.log
+.DS_Store
 
-# Uploaded files
 uploads/*
 !uploads/.gitkeep
-
-# macOS files
-.DS_Store
