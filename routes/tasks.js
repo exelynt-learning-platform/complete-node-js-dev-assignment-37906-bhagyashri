@@ -2,40 +2,32 @@
 const express = require("express");
 const multer = require("multer");
 const path = require("path");
-const { body, validationResult } = require("express-validator");
+const fs = require("fs");
+const {
+    body,
+    validationResult
+} = require("express-validator");
 
 const router = express.Router();
 
-// Temporary task data.
-let tasks = [
-    {
-        id: 1,
-        title: "Learn Express.js",
-        description: "Understand Express basics",
-        dueDate: "2026-11-15",
-        completed: false
-    }
-];
+let tasks = [];
 
-// 1. Logging Middleware
+// 1. Logging middleware
 function loggingMiddleware(req, res, next) {
-    const timestamp = new Date().toISOString();
-
-    console.log(`[${timestamp}] ${req.method} ${req.originalUrl}`);
-
+    console.log(
+        `[${new Date().toISOString()}] ${req.method} ${req.originalUrl}`
+    );
     next();
 }
 
-// 2. Authentication Middleware
+// 2. Authentication middleware
 function authenticationMiddleware(req, res, next) {
-    const validToken = "my-secret-token";
-    const authorizationHeader = req.headers.authorization;
-
-    const token = authorizationHeader
-        ? authorizationHeader.split(" ")[1]
+    const authorization = req.headers.authorization;
+    const token = authorization?.startsWith("Bearer ")
+        ? authorization.slice(7)
         : null;
 
-    if (token !== validToken) {
+    if (token !== "my-secret-token") {
         return res.status(401).json({
             success: false,
             message: "Unauthorized. Missing or invalid token."
@@ -45,15 +37,17 @@ function authenticationMiddleware(req, res, next) {
     next();
 }
 
-// 3. Configure Multer Storage
+// 3. Multer storage configuration
+const uploadDirectory = path.join(__dirname, "..", "uploads");
+
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, "uploads/");
+        cb(null, uploadDirectory);
     },
 
     filename: (req, file, cb) => {
         const uniqueName =
-            Date.now() + "-" + Math.round(Math.random() * 1e9);
+            `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
 
         const extension = path.extname(file.originalname).toLowerCase();
 
@@ -61,33 +55,41 @@ const storage = multer.diskStorage({
     }
 });
 
-// 4. Validate Allowed File Types
-function fileFilter(req, file, cb) {
-    const allowedMimeTypes = [
-        "application/pdf",
-        "image/jpeg",
-        "image/png",
-        "image/gif",
-        "image/webp"
-    ];
+// 4. Allowed file types
+const allowedTypes = {
+    "application/pdf": [".pdf"],
+    "image/jpeg": [".jpg", ".jpeg"],
+    "image/png": [".png"],
+    "image/gif": [".gif"],
+    "image/webp": [".webp"]
+};
 
-    if (allowedMimeTypes.includes(file.mimetype)) {
-        cb(null, true);
-    } else {
-        cb(new Error("Invalid file type. Only PDF and image files are allowed."));
+function fileFilter(req, file, cb) {
+    const extension = path.extname(file.originalname).toLowerCase();
+    const allowedExtensions = allowedTypes[file.mimetype];
+
+    if (
+        allowedExtensions &&
+        allowedExtensions.includes(extension)
+    ) {
+        return cb(null, true);
     }
+
+    cb(new Error(
+        "Invalid file type. Only PDF, JPG, JPEG, PNG, GIF and WEBP files are allowed."
+    ));
 }
 
-// 5. Create Multer Upload Configuration
+// 5. Multer configuration
 const upload = multer({
-    storage: storage,
-    fileFilter: fileFilter,
+    storage,
+    fileFilter,
     limits: {
-        fileSize: 5 * 1024 * 1024 // Maximum 5 MB
+        fileSize: 5 * 1024 * 1024
     }
 });
 
-// 6. Task Validation Middleware
+// 6. Task validation
 const validateTask = [
     body("title")
         .isString()
@@ -120,16 +122,16 @@ const validateTask = [
 router.use(loggingMiddleware);
 router.use(authenticationMiddleware);
 
-// GET: Retrieve all tasks.
+// GET /tasks
 router.get("/", (req, res) => {
     res.status(200).json({
         success: true,
         message: "Tasks fetched successfully.",
-        tasks: tasks
+        tasks
     });
 });
 
-// POST: Upload attachment and create task.
+// POST /tasks
 router.post(
     "/",
     (req, res, next) => {
@@ -140,16 +142,23 @@ router.post(
                     message: err.message
                 });
             }
-
             next();
         });
     },
     validateTask,
     (req, res) => {
-        // Check validation errors.
         const errors = validationResult(req);
 
         if (!errors.isEmpty()) {
+            // Remove uploaded file if task data is invalid.
+            if (req.file) {
+                fs.unlink(req.file.path, (err) => {
+                    if (err) {
+                        console.error("Unable to remove invalid upload:", err);
+                    }
+                });
+            }
+
             return res.status(400).json({
                 success: false,
                 message: "Task validation failed.",
@@ -160,17 +169,11 @@ router.post(
             });
         }
 
-        // Create task after successful validation.
-        const { title, description, dueDate } = req.body;
-
         const newTask = {
-            id: tasks.length > 0
-                ? Math.max(...tasks.map(task => task.id)) + 1
-                : 1,
-            title: title.trim(),
-            description: description.trim(),
-            dueDate: dueDate,
-            completed: false,
+            id: tasks.length + 1,
+            title: req.body.title.trim(),
+            description: req.body.description.trim(),
+            dueDate: req.body.dueDate,
             attachment: req.file
                 ? {
                     fileName: req.file.filename,
@@ -181,19 +184,12 @@ router.post(
 
         tasks.push(newTask);
 
-        res.status(201).json({
+        return res.status(201).json({
             success: true,
-            message: "Task created and attachment uploaded successfully.",
-            task: {
-                id: newTask.id,
-                title: newTask.title,
-                description: newTask.description,
-                dueDate: newTask.dueDate,
-                attachment: newTask.attachment
-            }
+            message: "Task created successfully.",
+            task: newTask
         });
     }
 );
 
-// Export router.
 module.exports = router;

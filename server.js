@@ -1,21 +1,28 @@
 const express = require("express");
+const path = require("path");
+
 const app = express();
+const PORT = 3000;
 
 const tasksRouter = require("./routes/tasks");
-const usersRouter = require("./routes/users");
 
+// Parse JSON for normal JSON requests.
 app.use(express.json());
 
+// Serve frontend files.
+app.use(express.static(path.join(__dirname, "public")));
+
 // Serve uploaded files.
-app.use("/uploads", express.static("uploads"));
+app.use(
+    "/uploads",
+    express.static(path.join(__dirname, "uploads"))
+);
 
-// Serve frontend files if you are using the public folder.
-app.use(express.static("public"));
-
-// Mount routers.
+// Mount task router.
 app.use("/tasks", tasksRouter);
-app.use("/users", usersRouter);
 
-app.listen(3000, () => {
-    console.log("Express server is running on port 3000");
+// Keep your other routes and 404/error handlers here.
+
+app.listen(PORT, () => {
+    console.log(`Express server is running on port ${PORT}`);
 });
