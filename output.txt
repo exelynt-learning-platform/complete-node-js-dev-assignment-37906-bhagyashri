@@ -1,0 +1,8 @@
+
+Welcome to Node.js Streams Assignment.
+
+Streams are used to read and write data efficiently.
+Node.js provides readable and writable streams.
+
+The pipe() method transfers data from one stream to another.
+This assignment demonstrates file copying using streams.
