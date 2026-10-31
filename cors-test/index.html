@@ -1,0 +1,36 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CORS Testing</title>
+</head>
+<body>
+    <h1>CORS Testing</h1>
+
+    <button id="testButton">Test API Request</button>
+
+    <pre id="result">Click the button to test the API.</pre>
+
+    <script>
+        const button = document.getElementById("testButton");
+        const result = document.getElementById("result");
+
+        button.addEventListener("click", async () => {
+            try {
+                const response = await fetch(
+                    "http://localhost:3000/api/cors-test"
+                );
+
+                const data = await response.json();
+
+                result.textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                result.textContent = "CORS or network error: " + error.message;
+                console.error("API request failed:", error);
+            }
+        });
+    </script>
+</body>
+</html>

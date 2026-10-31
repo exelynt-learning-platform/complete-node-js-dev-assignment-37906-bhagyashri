@@ -1,201 +1,103 @@
-# Task Listing API - Pagination and Filtering
+# CORS Configuration in Express.js
 
-## Objective
+## 1. Objective
 
-Enhance the GET /tasks API to support pagination and status filtering using query parameters.
+Configured Cross-Origin Resource Sharing (CORS) in an Express.js application to allow API requests from an authorized frontend origin and block browser access from unauthorized origins.
 
-## API Endpoint
+## 2. Installation
 
-**Method:** GET
-
-**URL:** `http://localhost:3000/tasks`
-
-**Authorization Header:**
-
-```text
-Authorization: Bearer my-secret-token
+```bash
+npm install cors
 ```
 
-## Query Parameters
+## 3. CORS Configuration
 
-| Parameter | Description | Default |
-|---|---|---|
-| page | Page number | 1 |
-| limit | Number of tasks per page | 10 |
-| status | Filter by pending or completed | All |
+Allowed origin:
 
-## Test Case 1: Pagination
+`http://localhost:5173`
 
-**Request:**
+Unauthorized origin used for testing:
 
-```text
-GET http://localhost:3000/tasks?page=1&limit=2
+`http://localhost:5174`
+
+CORS middleware is applied globally using:
+
+```javascript
+app.use(cors(corsOptions));
 ```
 
-**Expected Status:** 200 OK
+## 4. Allowed Origin Test
+
+**Frontend URL:** `http://localhost:5173`
+
+**API URL:** `http://localhost:3000/api/cors-test`
+
+**Result:** Successful API response.
 
 **Response:**
 
 ```json
 {
     "success": true,
-    "message": "Tasks fetched successfully.",
-    "pagination": {
-        "totalTasks": 5,
-        "currentPage": 1,
-        "limit": 2,
-        "totalPages": 3
-    },
-    "filters": {
-        "status": "all"
-    },
-    "tasks": [
-        {
-            "id": 1,
-            "title": "Learn Express.js",
-            "description": "Understand Express basics",
-            "dueDate": "2026-11-15",
-            "status": "pending",
-            "completed": false
-        },
-        {
-            "id": 2,
-            "title": "Practice Node.js",
-            "description": "Practice Node.js concepts",
-            "dueDate": "2026-11-16",
-            "status": "completed",
-            "completed": true
-        }
-    ]
+    "message": "CORS request successful!",
+    "data": "Your frontend can access this API."
 }
 ```
 
-## Test Case 2: Filter Pending Tasks
+### Allowed Origin Response Headers
 
-**Request:**
+Command:
+
+```bash
+curl -i -H "Origin: http://localhost:5173" http://localhost:3000/api/cors-test
+```
+
+Paste your actual terminal output here:
 
 ```text
-GET http://localhost:3000/tasks?status=pending
+PASTE ACTUAL ALLOWED ORIGIN RESPONSE HEADERS HERE
 ```
 
-**Expected Status:** 200 OK
+## 5. Blocked Origin Test
 
-**Response:**
+**Frontend URL:** `http://localhost:5174`
 
-```json
-{
-    "success": true,
-    "message": "Tasks fetched successfully.",
-    "pagination": {
-        "totalTasks": 3,
-        "currentPage": 1,
-        "limit": 10,
-        "totalPages": 1
-    },
-    "filters": {
-        "status": "pending"
-    },
-    "tasks": [
-        {
-            "id": 1,
-            "title": "Learn Express.js",
-            "description": "Understand Express basics",
-            "dueDate": "2026-11-15",
-            "status": "pending",
-            "completed": false
-        },
-        {
-            "id": 3,
-            "title": "Complete Assignment",
-            "description": "Finish Express assignment",
-            "dueDate": "2026-11-17",
-            "status": "pending",
-            "completed": false
-        },
-        {
-            "id": 5,
-            "title": "Practice API",
-            "description": "Test API endpoints",
-            "dueDate": "2026-11-19",
-            "status": "pending",
-            "completed": false
-        }
-    ]
-}
+**API URL:** `http://localhost:3000/api/cors-test`
+
+**Result:** Browser blocks frontend JavaScript from accessing the response because the origin is not allowed.
+
+### Blocked Origin Response Headers
+
+Command:
+
+```bash
+curl -i -H "Origin: http://localhost:5174" http://localhost:3000/api/cors-test
 ```
 
-## Test Case 3: Pagination with Status Filtering
-
-**Request:**
+Paste your actual terminal output here:
 
 ```text
-GET http://localhost:3000/tasks?page=2&limit=1&status=pending
+PASTE ACTUAL BLOCKED ORIGIN RESPONSE HEADERS HERE
 ```
 
-**Expected Status:** 200 OK
+The blocked response does not contain the `Access-Control-Allow-Origin` header.
 
-**Response:**
+### Browser Console Error
 
-```json
-{
-    "success": true,
-    "message": "Tasks fetched successfully.",
-    "pagination": {
-        "totalTasks": 3,
-        "currentPage": 2,
-        "limit": 1,
-        "totalPages": 3
-    },
-    "filters": {
-        "status": "pending"
-    },
-    "tasks": [
-        {
-            "id": 3,
-            "title": "Complete Assignment",
-            "description": "Finish Express assignment",
-            "dueDate": "2026-11-17",
-            "status": "pending",
-            "completed": false
-        }
-    ]
-}
-```
-
-## Test Case 4: Invalid Page Number
-
-**Request:**
+Paste the actual Chrome browser console error here:
 
 ```text
-GET http://localhost:3000/tasks?page=-1&limit=2
+PASTE ACTUAL CORS ERROR FROM CHROME CONSOLE HERE
 ```
 
-**Expected Status:** 400 Bad Request
+## 6. Security Configuration
 
-**Response:**
+- Only the configured frontend origin is allowed.
+- Unauthorized browser origins do not receive the CORS allow-origin header.
+- Allowed HTTP methods and request headers are configured.
+- CORS middleware is applied before API routes.
+- Credentials are disabled.
 
-```json
-{
-    "success": false,
-    "message": "Page must be a positive integer."
-}
-```
+## 7. Conclusion
 
-## Pagination Logic
-
-- Read page and limit from query parameters.
-- Apply status filtering first.
-- Calculate total matching tasks and total pages.
-- Calculate the start and end indexes.
-- Return only the requested subset of tasks.
-
-## Conclusion
-
-Successfully implemented pagination and filtering in the Express task listing API.
-
-- Supports page and limit parameters.
-- Supports pending and completed task filtering.
-- Supports combined filtering and pagination.
-- Uses default values when query parameters are omitted.
-- Returns structured JSON responses.
-- Handles invalid query parameters with HTTP 400.
+Successfully configured and tested CORS in the Express.js application. Verified that the authorized frontend can access the API and unauthorized browser origins are blocked by the browser's CORS policy.
