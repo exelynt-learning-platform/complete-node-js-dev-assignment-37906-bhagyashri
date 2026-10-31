@@ -1,0 +1,58 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Express Task and User Management</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <h1>Express Mini Application</h1>
+        <p>Task and User Management System</p>
+    </header>
+
+    <main>
+        <section class="welcome">
+            <h2>Welcome!</h2>
+            <p>This frontend is served using Express static middleware.</p>
+            <button id="welcomeButton">Get Started</button>
+            <p id="message"></p>
+        </section>
+
+        <section class="features">
+            <div class="card">
+                <h2>Task Management</h2>
+                <p>View and create tasks using Express Router.</p>
+                <button id="tasksButton">View Tasks</button>
+                <pre id="tasksResult"></pre>
+            </div>
+
+            <div class="card">
+                <h2>User Management</h2>
+                <p>View and create users using Express Router.</p>
+                <button id="usersButton">View Users</button>
+                <pre id="usersResult"></pre>
+            </div>
+        </section>
+
+        <section class="api-info">
+            <h2>Available API Routes</h2>
+            <ul>
+                <li>GET /tasks - Get all tasks</li>
+                <li>POST /tasks - Create a task</li>
+                <li>GET /users - Get all users</li>
+                <li>POST /users - Create a user</li>
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        <p>Created using Node.js and Express.js</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
