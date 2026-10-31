@@ -1,116 +1,201 @@
-# Task Attachment Upload API
+# Task Listing API - Pagination and Filtering
 
-## Overview
+## Objective
 
-This assignment enhances the Express task creation API with file upload functionality using Multer.
-
-## Dependencies
-
-```bash
-npm install express express-validator multer
-```
+Enhance the GET /tasks API to support pagination and status filtering using query parameters.
 
 ## API Endpoint
 
-**Method:** POST
+**Method:** GET
 
 **URL:** `http://localhost:3000/tasks`
 
-**Authorization:**
+**Authorization Header:**
 
 ```text
-Bearer my-secret-token
+Authorization: Bearer my-secret-token
 ```
 
-**Body type:** form-data
+## Query Parameters
 
-| Key | Type | Required |
+| Parameter | Description | Default |
 |---|---|---|
-| title | Text | Yes |
-| description | Text | Yes |
-| dueDate | Text | Yes |
-| attachment | File | No |
+| page | Page number | 1 |
+| limit | Number of tasks per page | 10 |
+| status | Filter by pending or completed | All |
 
-## File Upload Configuration
+## Test Case 1: Pagination
 
-- Storage directory: `uploads/`
-- Maximum file size: 5 MB
-- Allowed formats: PDF, JPG, JPEG, PNG, GIF and WEBP
-- Upload field: `attachment`
-- File names: Unique timestamp and random number
+**Request:**
 
-## Test 1: Successful File Upload
+```text
+GET http://localhost:3000/tasks?page=1&limit=2
+```
 
-**Request:** POST `/tasks`
+**Expected Status:** 200 OK
 
-**Body (form-data):**
-
-| Key | Value | Type |
-|---|---|---|
-| title | Complete Node.js Assignment | Text |
-| description | Complete the Multer upload assignment. | Text |
-| dueDate | 2026-11-15 | Text |
-| attachment | Select a PDF file | File |
-
-**Expected status:** 201 Created
-
-**Example JSON response:**
+**Response:**
 
 ```json
 {
     "success": true,
-    "message": "Task created successfully.",
-    "task": {
-        "id": 1,
-        "title": "Complete Node.js Assignment",
-        "description": "Complete the Multer upload assignment.",
-        "dueDate": "2026-11-15",
-        "attachment": {
-            "fileName": "1793456789000-123456789.pdf",
-            "filePath": "/uploads/1793456789000-123456789.pdf"
+    "message": "Tasks fetched successfully.",
+    "pagination": {
+        "totalTasks": 5,
+        "currentPage": 1,
+        "limit": 2,
+        "totalPages": 3
+    },
+    "filters": {
+        "status": "all"
+    },
+    "tasks": [
+        {
+            "id": 1,
+            "title": "Learn Express.js",
+            "description": "Understand Express basics",
+            "dueDate": "2026-11-15",
+            "status": "pending",
+            "completed": false
+        },
+        {
+            "id": 2,
+            "title": "Practice Node.js",
+            "description": "Practice Node.js concepts",
+            "dueDate": "2026-11-16",
+            "status": "completed",
+            "completed": true
         }
-    }
+    ]
 }
 ```
 
-Replace this example with the actual Postman response.
+## Test Case 2: Filter Pending Tasks
 
-## Test 2: Rejected File Type
+**Request:**
 
-**Request:** POST `/tasks`
+```text
+GET http://localhost:3000/tasks?status=pending
+```
 
-**Body (form-data):**
+**Expected Status:** 200 OK
 
-| Key | Value | Type |
-|---|---|---|
-| title | Test Invalid File | Text |
-| description | Testing invalid attachment. | Text |
-| dueDate | 2026-11-15 | Text |
-| attachment | Select a TXT file | File |
+**Response:**
 
-**Expected status:** 400 Bad Request
+```json
+{
+    "success": true,
+    "message": "Tasks fetched successfully.",
+    "pagination": {
+        "totalTasks": 3,
+        "currentPage": 1,
+        "limit": 10,
+        "totalPages": 1
+    },
+    "filters": {
+        "status": "pending"
+    },
+    "tasks": [
+        {
+            "id": 1,
+            "title": "Learn Express.js",
+            "description": "Understand Express basics",
+            "dueDate": "2026-11-15",
+            "status": "pending",
+            "completed": false
+        },
+        {
+            "id": 3,
+            "title": "Complete Assignment",
+            "description": "Finish Express assignment",
+            "dueDate": "2026-11-17",
+            "status": "pending",
+            "completed": false
+        },
+        {
+            "id": 5,
+            "title": "Practice API",
+            "description": "Test API endpoints",
+            "dueDate": "2026-11-19",
+            "status": "pending",
+            "completed": false
+        }
+    ]
+}
+```
 
-**JSON response:**
+## Test Case 3: Pagination with Status Filtering
+
+**Request:**
+
+```text
+GET http://localhost:3000/tasks?page=2&limit=1&status=pending
+```
+
+**Expected Status:** 200 OK
+
+**Response:**
+
+```json
+{
+    "success": true,
+    "message": "Tasks fetched successfully.",
+    "pagination": {
+        "totalTasks": 3,
+        "currentPage": 2,
+        "limit": 1,
+        "totalPages": 3
+    },
+    "filters": {
+        "status": "pending"
+    },
+    "tasks": [
+        {
+            "id": 3,
+            "title": "Complete Assignment",
+            "description": "Finish Express assignment",
+            "dueDate": "2026-11-17",
+            "status": "pending",
+            "completed": false
+        }
+    ]
+}
+```
+
+## Test Case 4: Invalid Page Number
+
+**Request:**
+
+```text
+GET http://localhost:3000/tasks?page=-1&limit=2
+```
+
+**Expected Status:** 400 Bad Request
+
+**Response:**
 
 ```json
 {
     "success": false,
-    "message": "Invalid file type. Only PDF, JPG, JPEG, PNG, GIF and WEBP files are allowed."
+    "message": "Page must be a positive integer."
 }
 ```
 
-## Uploaded File Access
+## Pagination Logic
 
-Uploaded files are stored in the `uploads/` folder.
-
-They can be accessed through:
-
-`http://localhost:3000/uploads/filename.pdf`
-
-## Git Configuration
-
-The `.gitignore` file excludes uploaded files while retaining `uploads/.gitkeep`.
+- Read page and limit from query parameters.
+- Apply status filtering first.
+- Calculate total matching tasks and total pages.
+- Calculate the start and end indexes.
+- Return only the requested subset of tasks.
 
 ## Conclusion
 
-Successfully implemented Multer file upload functionality, file type validation, unique file naming, upload storage, and attachment details in the task creation response.
+Successfully implemented pagination and filtering in the Express task listing API.
+
+- Supports page and limit parameters.
+- Supports pending and completed task filtering.
+- Supports combined filtering and pagination.
+- Uses default values when query parameters are omitted.
+- Returns structured JSON responses.
+- Handles invalid query parameters with HTTP 400.
