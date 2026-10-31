@@ -62,9 +62,6 @@ app.use(
     express.static(path.join(__dirname, "uploads"))
 );
 
-// 6. Mount API routers
-console.log("tasksRouter:", typeof tasksRouter);
-console.log("usersRouter:", typeof usersRouter);
 
 // Mount routers
 app.use("/tasks", tasksRouter);

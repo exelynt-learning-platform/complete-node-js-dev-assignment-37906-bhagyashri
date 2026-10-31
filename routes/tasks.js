@@ -1,27 +1,61 @@
 
 const express = require("express");
+
 const router = express.Router();
 
+// Temporary in-memory task storage
+let tasks = [
+    {
+        id: 1,
+        title: "Complete Node.js assignment",
+        description: "Test CORS configuration",
+        status: "pending"
+    },
+    {
+        id: 2,
+        title: "Test API",
+        description: "Verify GET and POST requests",
+        status: "completed"
+    }
+];
 
-function authenticationMiddleware(req, res, next) {
-    const authorization = req.headers.authorization;
+// GET /tasks - Fetch all tasks
+router.get("/", (req, res) => {
+    res.status(200).json({
+        success: true,
+        message: "Tasks fetched successfully",
+        totalTasks: tasks.length,
+        tasks
+    });
+});
 
-    const token = authorization?.startsWith("Bearer ")
-        ? authorization.slice(7)
-        : null;
+// POST /tasks - Create a new task
+router.post("/", (req, res) => {
+    const { title, description } = req.body;
 
-    const expectedToken = process.env.API_TOKEN;
-
-    if (!expectedToken || token !== expectedToken) {
-        return res.status(401).json({
+    if (!title || !description) {
+        return res.status(400).json({
             success: false,
-            message: "Unauthorized. Missing or invalid token."
+            message: "Title and description are required."
         });
     }
 
-    next();
-}
+    const newTask = {
+        id: tasks.length
+            ? Math.max(...tasks.map(task => task.id)) + 1
+            : 1,
+        title,
+        description,
+        status: "pending"
+    };
 
-router.use(authenticationMiddleware);
+    tasks.push(newTask);
+
+    res.status(201).json({
+        success: true,
+        message: "Task created successfully",
+        task: newTask
+    });
+});
 
 module.exports = router;
