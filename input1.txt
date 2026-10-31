@@ -1,0 +1,3 @@
+Welcome to Node.js asynchronous programming.
+This is the first input file.
+Learning callback-based file operations.
