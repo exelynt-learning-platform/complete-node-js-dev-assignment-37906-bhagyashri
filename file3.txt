@@ -1,0 +1,3 @@
+The Event Loop handles asynchronous tasks.
+File operations can run without blocking.
+Node.js supports multiple asynchronous APIs.

@@ -1,0 +1,3 @@
+Promises help manage asynchronous operations.
+Async and await make code easier to read.
+Error handling is important in Node.js.
