@@ -1,7 +1,6 @@
 
 const express = require("express");
 
-// Create a router for task-related routes.
 const router = express.Router();
 
 // Temporary task data.
@@ -10,8 +9,46 @@ let tasks = [
     { id: 2, title: "Practice Express Router", completed: false }
 ];
 
-// GET route - Retrieve all tasks.
-// URL: GET /tasks
+// 1. Logging Middleware
+function loggingMiddleware(req, res, next) {
+    const timestamp = new Date().toISOString();
+
+    console.log(
+        `[${timestamp}] ${req.method} ${req.originalUrl}`
+    );
+
+    next();
+}
+
+// 2. Authentication Middleware
+function authenticationMiddleware(req, res, next) {
+    const validToken = "my-secret-token";
+
+    // Read the token from the Authorization header.
+    const authorizationHeader = req.headers.authorization;
+
+    // Expected format: Bearer my-secret-token
+    const token = authorizationHeader
+        ? authorizationHeader.split(" ")[1]
+        : null;
+
+    if (token !== validToken) {
+        return res.status(401).json({
+            success: false,
+            message: "Unauthorized. Missing or invalid token."
+        });
+    }
+
+    // Token is valid. Continue to the route handler.
+    next();
+}
+
+// Apply middleware in the correct sequence.
+// Logging runs first, then authentication.
+router.use(loggingMiddleware);
+router.use(authenticationMiddleware);
+
+// 3. GET Route - Retrieve all tasks.
 router.get("/", (req, res) => {
     res.status(200).json({
         success: true,
@@ -20,12 +57,14 @@ router.get("/", (req, res) => {
     });
 });
 
-// POST route - Create a new task.
-// URL: POST /tasks
+// 4. POST Route - Create a new task.
 router.post("/", (req, res) => {
     const { title } = req.body;
 
-    if (!title || typeof title !== "string" || title.trim() === "") {
+    if (
+        typeof title !== "string" ||
+        title.trim() === ""
+    ) {
         return res.status(400).json({
             success: false,
             message: "Task title is required."
@@ -33,7 +72,9 @@ router.post("/", (req, res) => {
     }
 
     const newTask = {
-        id: tasks.length > 0 ? Math.max(...tasks.map(task => task.id)) + 1 : 1,
+        id: tasks.length > 0
+            ? Math.max(...tasks.map(task => task.id)) + 1
+            : 1,
         title: title.trim(),
         completed: false
     };
@@ -47,5 +88,5 @@ router.post("/", (req, res) => {
     });
 });
 
-// Export the task router.
+// Export the router.
 module.exports = router;
