@@ -1,0 +1,142 @@
+
+# Node.js Installation and Project Setup
+
+## 1. Objective
+
+The objective of this assignment is to install Node.js and npm, verify the installation, create a new Node.js project, and understand the purpose of the `package.json` file.
+
+## 2. Install Node.js and npm
+
+1. Visit the official Node.js website: https://nodejs.org/
+2. Download the LTS (Long-Term Support) version.
+3. Install Node.js by following the installation instructions.
+4. npm is automatically installed along with Node.js.
+
+## 3. Verify Node.js and npm Installation
+
+Open Terminal (macOS/Linux) or Command Prompt (Windows).
+
+### Check Node.js Version
+
+Run:
+
+```bash
+node -v
+```
+
+Example output:
+
+```text
+v22.14.0
+```
+
+### Check npm Version
+
+Run:
+
+```bash
+npm -v
+```
+
+Example output:
+
+```text
+10.9.2
+```
+
+**Note:** The version numbers may differ depending on your installed version.
+
+## 4. Create a New Node.js Project
+
+Run the following commands one by one:
+
+### Step 1: Create a project folder
+
+```bash
+mkdir node-project
+```
+
+### Step 2: Navigate into the folder
+
+```bash
+cd node-project
+```
+
+### Step 3: Initialize the npm project
+
+```bash
+npm init -y
+```
+
+This command initializes the project with default settings and automatically generates a `package.json` file.
+
+## 5. Project Structure
+
+After initialization, the project structure looks like this:
+
+```text
+node-project/
+└── package.json
+```
+
+## 6. Understanding package.json
+
+Example `package.json` file:
+
+```json
+{
+  "name": "node-project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
+```
+
+### Identify Important Properties
+
+| Property | Value | Description |
+|---|---|---|
+| Project Name | node-project | Name of the project |
+| Version | 1.0.0 | Current project version |
+| Main File | index.js | Default entry point of the package |
+| Scripts | test | Defines commands that can be executed using npm |
+
+### Understanding the Scripts Section
+
+The `scripts` section contains commands that developers can execute using npm.
+
+Example:
+
+```bash
+npm test
+```
+
+This command executes the test script defined inside `package.json`.
+
+## 7. What is npm?
+
+npm stands for Node Package Manager. It is the default package manager used with Node.js. It helps developers install, update, and manage packages or libraries in their projects. Developers can download reusable code from the npm registry. npm also helps manage project dependencies and execute project-related commands. It makes development easier by providing access to thousands of ready-to-use packages.
+
+## 8. What is package.json?
+
+`package.json` is an important configuration file in a Node.js project. It stores project information such as the project name, version, description, and main file. It also contains scripts that developers can execute using npm. It maintains information about project dependencies and their version requirements. npm uses this file to understand and manage the project configuration. It helps developers maintain and share their projects easily.
+
+## 9. Screenshots
+
+The following screenshots should be added as proof of completing the assignment:
+
+1. Terminal showing the `node -v` output.
+2. Terminal showing the `npm -v` output.
+3. Terminal showing the successful execution of `npm init -y`.
+4. Project folder showing the generated `package.json` file.
+5. `package.json` file opened in VS Code or another text editor.
+
+## 10. Conclusion
+
+Node.js and npm were installed and verified using terminal commands. A new project named `node-project` was created, and npm initialization generated the `package.json` file. The important properties of `package.json`, including the project name, version, main file, and scripts section, were identified. The purpose of npm and `package.json` was also understood.
