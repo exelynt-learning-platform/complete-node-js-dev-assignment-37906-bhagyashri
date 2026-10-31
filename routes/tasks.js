@@ -1,4 +1,7 @@
+
 const express = require("express");
+const multer = require("multer");
+const path = require("path");
 const { body, validationResult } = require("express-validator");
 
 const router = express.Router();
@@ -42,7 +45,49 @@ function authenticationMiddleware(req, res, next) {
     next();
 }
 
-// 3. Task Validation Middleware
+// 3. Configure Multer Storage
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, "uploads/");
+    },
+
+    filename: (req, file, cb) => {
+        const uniqueName =
+            Date.now() + "-" + Math.round(Math.random() * 1e9);
+
+        const extension = path.extname(file.originalname).toLowerCase();
+
+        cb(null, uniqueName + extension);
+    }
+});
+
+// 4. Validate Allowed File Types
+function fileFilter(req, file, cb) {
+    const allowedMimeTypes = [
+        "application/pdf",
+        "image/jpeg",
+        "image/png",
+        "image/gif",
+        "image/webp"
+    ];
+
+    if (allowedMimeTypes.includes(file.mimetype)) {
+        cb(null, true);
+    } else {
+        cb(new Error("Invalid file type. Only PDF and image files are allowed."));
+    }
+}
+
+// 5. Create Multer Upload Configuration
+const upload = multer({
+    storage: storage,
+    fileFilter: fileFilter,
+    limits: {
+        fileSize: 5 * 1024 * 1024 // Maximum 5 MB
+    }
+});
+
+// 6. Task Validation Middleware
 const validateTask = [
     body("title")
         .isString()
@@ -84,43 +129,71 @@ router.get("/", (req, res) => {
     });
 });
 
-// POST: Create a task after validating the request.
-router.post("/", validateTask, (req, res) => {
-    // Check validation results before creating a task.
-    const errors = validationResult(req);
+// POST: Upload attachment and create task.
+router.post(
+    "/",
+    (req, res, next) => {
+        upload.single("attachment")(req, res, (err) => {
+            if (err) {
+                return res.status(400).json({
+                    success: false,
+                    message: err.message
+                });
+            }
 
-    if (!errors.isEmpty()) {
-        return res.status(400).json({
-            success: false,
-            message: "Task validation failed.",
-            errors: errors.array().map(error => ({
-                field: error.path,
-                message: error.msg
-            }))
+            next();
+        });
+    },
+    validateTask,
+    (req, res) => {
+        // Check validation errors.
+        const errors = validationResult(req);
+
+        if (!errors.isEmpty()) {
+            return res.status(400).json({
+                success: false,
+                message: "Task validation failed.",
+                errors: errors.array().map(error => ({
+                    field: error.path,
+                    message: error.msg
+                }))
+            });
+        }
+
+        // Create task after successful validation.
+        const { title, description, dueDate } = req.body;
+
+        const newTask = {
+            id: tasks.length > 0
+                ? Math.max(...tasks.map(task => task.id)) + 1
+                : 1,
+            title: title.trim(),
+            description: description.trim(),
+            dueDate: dueDate,
+            completed: false,
+            attachment: req.file
+                ? {
+                    fileName: req.file.filename,
+                    filePath: `/uploads/${req.file.filename}`
+                }
+                : null
+        };
+
+        tasks.push(newTask);
+
+        res.status(201).json({
+            success: true,
+            message: "Task created and attachment uploaded successfully.",
+            task: {
+                id: newTask.id,
+                title: newTask.title,
+                description: newTask.description,
+                dueDate: newTask.dueDate,
+                attachment: newTask.attachment
+            }
         });
     }
-
-    // Create task only when validation succeeds.
-    const { title, description, dueDate } = req.body;
-
-    const newTask = {
-        id: tasks.length > 0
-            ? Math.max(...tasks.map(task => task.id)) + 1
-            : 1,
-        title: title.trim(),
-        description: description.trim(),
-        dueDate: dueDate,
-        completed: false
-    };
-
-    tasks.push(newTask);
-
-    res.status(201).json({
-        success: true,
-        message: "Task created successfully.",
-        task: newTask
-    });
-});
+);
 
 // Export router.
 module.exports = router;
