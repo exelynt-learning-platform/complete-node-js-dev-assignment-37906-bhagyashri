@@ -1,0 +1,24 @@
+{
+  "name": "complete-node-js-dev-assignment-37906-bhagyashri",
+  "version": "1.0.0",
+  "description": "Module &amp; Week Assignments - This repository contains module-wise and week-wise assignment submissions.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/exelynt-learning-platform/complete-node-js-dev-assignment-37906-bhagyashri.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/exelynt-learning-platform/complete-node-js-dev-assignment-37906-bhagyashri/issues"
+  },
+  "homepage": "https://github.com/exelynt-learning-platform/complete-node-js-dev-assignment-37906-bhagyashri#readme",
+  "dependencies": {
+    "express": "^5.3.0"
+  }
+}
