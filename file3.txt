@@ -1,0 +1,2 @@
+Hello! This is the content of File 3.
+This file is read after File 2.
