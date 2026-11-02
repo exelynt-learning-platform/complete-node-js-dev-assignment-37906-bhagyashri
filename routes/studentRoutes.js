@@ -5,12 +5,7 @@ const Student = require("../models/Student");
 
 const router = express.Router();
 
-// Helper function for checking student ID
-const isValidStudentId = (id) => {
-    return mongoose.isValidObjectId(id);
-};
-
-// Helper function for handling errors
+// Helper function to handle errors
 const handleError = (res, error) => {
     if (error.name === "ValidationError") {
         const messages = Object.values(error.errors).map(
@@ -39,8 +34,7 @@ const handleError = (res, error) => {
     });
 };
 
-// 1. CREATE STUDENT
-// POST /students
+// POST /students - Create a student
 router.post("/", async (req, res) => {
     try {
         const { name, age, grade, email } = req.body;
@@ -59,21 +53,55 @@ router.post("/", async (req, res) => {
             message: "Student created successfully",
             data: savedStudent
         });
-
     } catch (error) {
         return handleError(res, error);
     }
 });
 
-// 2. GET ALL STUDENTS
-// GET /students
+// GET /students - Filter, project and sort students
 router.get("/", async (req, res) => {
     try {
-        const students = await Student.find();
+        const { grade, sort = "asc" } = req.query;
+
+        // Validate sort parameter
+        if (!["asc", "desc"].includes(sort)) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid sort parameter. Use asc or desc."
+            });
+        }
+
+        // Validate grade parameter
+        if (grade !== undefined) {
+            if (typeof grade !== "string" || !grade.trim()) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Grade must be a non-empty string."
+                });
+            }
+        }
+
+        // Build filter
+        const filter = {};
+
+        if (grade !== undefined) {
+            filter.grade = grade.trim();
+        }
+
+        // Execute query:
+        // 1. Filter by grade
+        // 2. Select only name and email
+        // 3. Sort by age
+        const students = await Student.find(filter)
+            .select("name email -_id")
+            .sort({ age: sort === "asc" ? 1 : -1 });
 
         return res.status(200).json({
             success: true,
             count: students.length,
+            message: students.length === 0
+                ? "No students found matching the given filter"
+                : "Students retrieved successfully",
             data: students
         });
 
@@ -82,13 +110,12 @@ router.get("/", async (req, res) => {
     }
 });
 
-// 3. GET STUDENT BY ID
-// GET /students/:id
+// GET /students/:id - Get one student
 router.get("/:id", async (req, res) => {
     try {
         const { id } = req.params;
 
-        if (!isValidStudentId(id)) {
+        if (!mongoose.isValidObjectId(id)) {
             return res.status(400).json({
                 success: false,
                 message: "Invalid student ID"
@@ -114,13 +141,12 @@ router.get("/:id", async (req, res) => {
     }
 });
 
-// 4. UPDATE STUDENT
-// PUT /students/:id
+// PUT /students/:id - Update a student
 router.put("/:id", async (req, res) => {
     try {
         const { id } = req.params;
 
-        if (!isValidStudentId(id)) {
+        if (!mongoose.isValidObjectId(id)) {
             return res.status(400).json({
                 success: false,
                 message: "Invalid student ID"
@@ -170,13 +196,12 @@ router.put("/:id", async (req, res) => {
     }
 });
 
-// 5. DELETE STUDENT
-// DELETE /students/:id
+// DELETE /students/:id - Delete a student
 router.delete("/:id", async (req, res) => {
     try {
         const { id } = req.params;
 
-        if (!isValidStudentId(id)) {
+        if (!mongoose.isValidObjectId(id)) {
             return res.status(400).json({
                 success: false,
                 message: "Invalid student ID"
