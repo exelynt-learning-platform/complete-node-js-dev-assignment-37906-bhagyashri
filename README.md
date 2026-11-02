@@ -253,3 +253,70 @@ This demonstration uses in-memory arrays for tasks and users. Records reset when
 ## Security Note
 
 The shared API key is for assignment demonstration only. Do not commit .env or expose the API key in frontend code. A production application should use proper user authentication and token management.
+
+## MongoDB Setup and Connection
+
+### Technologies
+
+- Node.js
+- Express.js
+- MongoDB Atlas
+- Mongoose
+- dotenv
+
+### Installation
+
+Install Mongoose:
+
+```bash
+npm install mongoose
+```
+
+### Environment Configuration
+
+Create a `.env` file in the project root:
+
+```env
+PORT=3000
+API_TOKEN=your_api_token
+FRONTEND_ORIGIN=http://localhost:5173
+MONGODB_URI=your_mongodb_connection_string
+```
+
+Never commit the actual `.env` file.
+
+Use `.env.example` as a template for environment configuration.
+
+### Database Connection
+
+The MongoDB connection is managed separately in `config/db.js` using Mongoose.
+
+The application connects to MongoDB before starting the Express server.
+
+### Run the Application
+
+```bash
+npm start
+```
+
+### Expected Terminal Output
+
+Paste your actual successful terminal output here after running the application.
+
+Example:
+
+```text
+◇ injected env (4) from .env
+MongoDB connected successfully!
+Database Name: task_manager
+Server running at http://localhost:3000
+Swagger UI: http://localhost:3000/api-docs
+```
+
+### Error Handling
+
+- Connection failures are logged in the terminal.
+- The application does not start if the initial database connection fails.
+- Runtime database errors are logged.
+- Database disconnection events are logged.
+- The database connection is closed when the application receives SIGINT.

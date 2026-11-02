@@ -5,6 +5,8 @@ const express = require("express");
 const cors = require("cors");
 const path = require("path");
 const fs = require("fs");
+const connectDB = require("./config/db");
+const mongoose = require("mongoose");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -96,7 +98,28 @@ app.use(notFoundMiddleware);
 app.use(errorMiddleware);
 
 // Start server
-app.listen(PORT, () => {
-    console.log(`Server running at http://localhost:${PORT}`);
-    console.log(`Swagger UI: http://localhost:${PORT}/api-docs`);
+// Connect to MongoDB before starting the Express server.
+const startServer = async () => {
+    try {
+        await connectDB();
+
+        app.listen(PORT, () => {
+            console.log(`Server running at http://localhost:${PORT}`);
+            console.log(`Swagger UI: http://localhost:${PORT}/api-docs`);
+        });
+
+    } catch (error) {
+        console.error("Failed to start server:", error.message);
+        process.exit(1);
+    }
+};
+
+// Start the application.
+startServer();
+
+// Gracefully close the database connection when the application stops.
+process.on("SIGINT", async () => {
+    await mongoose.connection.close();
+    console.log("MongoDB connection closed.");
+    process.exit(0);
 });
