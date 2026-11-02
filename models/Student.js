@@ -40,8 +40,6 @@ const studentSchema = new mongoose.Schema(
     }
 );
 
-// Create Mongoose model
 const Student = mongoose.model("Student", studentSchema);
 
-// Export model
 module.exports = Student;
