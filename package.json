@@ -1,10 +1,27 @@
 {
+  "name": "complete-node-js-dev-assignment-37906-bhagyashri",
+  "version": "1.0.0",
+  "description": "Configured Cross-Origin Resource Sharing (CORS) in an Express.js application to allow API requests from an authorized frontend origin and block browser access from unauthorized origins.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/exelynt-learning-platform/complete-node-js-dev-assignment-37906-bhagyashri.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/exelynt-learning-platform/complete-node-js-dev-assignment-37906-bhagyashri/issues"
+  },
+  "homepage": "https://github.com/exelynt-learning-platform/complete-node-js-dev-assignment-37906-bhagyashri#readme",
   "dependencies": {
     "cors": "^2.8.6",
     "dotenv": "^18.0.9",
     "express": "^5.3.0",
-    "express-validator": "^7.3.2",
-    "multer": "^2.5.0",
     "swagger-jsdoc": "^6.3.0",
     "swagger-ui-express": "^5.0.1"
   }

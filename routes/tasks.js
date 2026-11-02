@@ -7,37 +7,34 @@ const router = express.Router();
 let tasks = [
     {
         id: 1,
-        title: "Complete Node.js assignment",
-        description: "Learn Swagger documentation",
+        title: "Learn Node.js",
+        description: "Understand Express and REST APIs",
         status: "pending"
     },
     {
         id: 2,
-        title: "Test Task Manager API",
-        description: "Test all CRUD operations",
+        title: "Complete Swagger assignment",
+        description: "Document all API endpoints",
         status: "completed"
     }
 ];
 
 /**
- * @swagger
+ * @openapi
  * components:
  *   schemas:
  *     Task:
  *       type: object
- *       required:
- *         - title
- *         - description
  *       properties:
  *         id:
  *           type: integer
  *           example: 1
  *         title:
  *           type: string
- *           example: Complete Node.js assignment
+ *           example: Learn Node.js
  *         description:
  *           type: string
- *           example: Learn Swagger documentation
+ *           example: Understand Express and REST APIs
  *         status:
  *           type: string
  *           enum: [pending, completed]
@@ -61,14 +58,15 @@ let tasks = [
  */
 
 /**
- * @swagger
+ * @openapi
  * /tasks:
  *   get:
  *     summary: Get all tasks
- *     description: Returns the list of all tasks.
- *     tags: [Tasks]
+ *     description: Returns all tasks in the system.
+ *     tags:
+ *       - Tasks
  *     responses:
- *       200:
+ *       '200':
  *         description: Tasks retrieved successfully.
  *         content:
  *           application/json:
@@ -85,6 +83,8 @@ let tasks = [
  *                   type: array
  *                   items:
  *                     $ref: '#/components/schemas/Task'
+ *       '500':
+ *         description: Internal server error.
  */
 router.get("/", (req, res) => {
     res.status(200).json({
@@ -96,11 +96,12 @@ router.get("/", (req, res) => {
 });
 
 /**
- * @swagger
+ * @openapi
  * /tasks:
  *   post:
  *     summary: Create a new task
- *     tags: [Tasks]
+ *     tags:
+ *       - Tasks
  *     requestBody:
  *       required: true
  *       content:
@@ -108,7 +109,7 @@ router.get("/", (req, res) => {
  *           schema:
  *             $ref: '#/components/schemas/TaskInput'
  *     responses:
- *       201:
+ *       '201':
  *         description: Task created successfully.
  *         content:
  *           application/json:
@@ -123,8 +124,10 @@ router.get("/", (req, res) => {
  *                   example: Task created successfully
  *                 task:
  *                   $ref: '#/components/schemas/Task'
- *       400:
- *         description: Title and description are required.
+ *       '400':
+ *         description: Invalid or missing task details.
+ *       '500':
+ *         description: Internal server error.
  */
 router.post("/", (req, res) => {
     const { title, description, status } = req.body;
@@ -139,7 +142,10 @@ router.post("/", (req, res) => {
         });
     }
 
-    if (status !== undefined && !["pending", "completed"].includes(status)) {
+    if (
+        status !== undefined &&
+        !["pending", "completed"].includes(status)
+    ) {
         return res.status(400).json({
             success: false,
             message: "Status must be pending or completed."
@@ -165,11 +171,12 @@ router.post("/", (req, res) => {
 });
 
 /**
- * @swagger
+ * @openapi
  * /tasks/{id}:
  *   put:
  *     summary: Update an existing task
- *     tags: [Tasks]
+ *     tags:
+ *       - Tasks
  *     parameters:
  *       - in: path
  *         name: id
@@ -185,7 +192,7 @@ router.post("/", (req, res) => {
  *           schema:
  *             $ref: '#/components/schemas/TaskInput'
  *     responses:
- *       200:
+ *       '200':
  *         description: Task updated successfully.
  *         content:
  *           application/json:
@@ -197,14 +204,15 @@ router.post("/", (req, res) => {
  *                   example: true
  *                 task:
  *                   $ref: '#/components/schemas/Task'
- *       400:
- *         description: Invalid task data.
- *       404:
+ *       '400':
+ *         description: Invalid task ID or task details.
+ *       '404':
  *         description: Task not found.
+ *       '500':
+ *         description: Internal server error.
  */
 router.put("/:id", (req, res) => {
     const id = Number(req.params.id);
-    const task = tasks.find(item => item.id === id);
 
     if (!Number.isInteger(id) || id <= 0) {
         return res.status(400).json({
@@ -212,6 +220,8 @@ router.put("/:id", (req, res) => {
             message: "Invalid task ID."
         });
     }
+
+    const task = tasks.find(item => item.id === id);
 
     if (!task) {
         return res.status(404).json({
@@ -232,7 +242,10 @@ router.put("/:id", (req, res) => {
         });
     }
 
-    if (status !== undefined && !["pending", "completed"].includes(status)) {
+    if (
+        status !== undefined &&
+        !["pending", "completed"].includes(status)
+    ) {
         return res.status(400).json({
             success: false,
             message: "Status must be pending or completed."
@@ -241,7 +254,10 @@ router.put("/:id", (req, res) => {
 
     task.title = title.trim();
     task.description = description.trim();
-    task.status = status || task.status;
+
+    if (status !== undefined) {
+        task.status = status;
+    }
 
     res.status(200).json({
         success: true,
@@ -251,11 +267,12 @@ router.put("/:id", (req, res) => {
 });
 
 /**
- * @swagger
+ * @openapi
  * /tasks/{id}:
  *   delete:
  *     summary: Delete a task
- *     tags: [Tasks]
+ *     tags:
+ *       - Tasks
  *     parameters:
  *       - in: path
  *         name: id
@@ -265,12 +282,27 @@ router.put("/:id", (req, res) => {
  *           type: integer
  *         example: 1
  *     responses:
- *       200:
+ *       '200':
  *         description: Task deleted successfully.
- *       400:
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: Task deleted successfully
+ *                 task:
+ *                   $ref: '#/components/schemas/Task'
+ *       '400':
  *         description: Invalid task ID.
- *       404:
+ *       '404':
  *         description: Task not found.
+ *       '500':
+ *         description: Internal server error.
  */
 router.delete("/:id", (req, res) => {
     const id = Number(req.params.id);

@@ -1,5 +1,6 @@
 
 const swaggerJsdoc = require("swagger-jsdoc");
+const path = require("path");
 
 const options = {
     definition: {
@@ -9,7 +10,7 @@ const options = {
             title: "Task Manager API",
             version: "1.0.0",
             description:
-                "Interactive API documentation for the Task Manager application."
+                "REST API documentation for managing tasks and users."
         },
 
         servers: [
@@ -17,18 +18,12 @@ const options = {
                 url: "http://localhost:3000",
                 description: "Local development server"
             }
-        ],
-
-        tags: [
-            {
-                name: "Tasks",
-                description: "Task management operations"
-            }
         ]
     },
 
-    // Read JSDoc comments from route files
-    apis: ["./routes/*.js"]
+    apis: [
+        path.join(__dirname, "routes", "*.js")
+    ]
 };
 
 const swaggerSpec = swaggerJsdoc(options);
