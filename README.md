@@ -101,3 +101,65 @@ PASTE ACTUAL CORS ERROR FROM CHROME CONSOLE HERE
 ## 7. Conclusion
 
 Successfully configured and tested CORS in the Express.js application. Verified that the authorized frontend can access the API and unauthorized browser origins are blocked by the browser's CORS policy.
+
+
+# Task Manager API – Swagger Documentation
+
+## Overview
+
+This project provides a RESTful Task Manager API using Node.js and Express.js.
+
+Swagger UI and OpenAPI 3.0 are integrated to provide interactive API documentation.
+
+## Technologies Used
+
+- Node.js
+- Express.js
+- swagger-ui-express
+- swagger-jsdoc
+- OpenAPI 3.0
+
+## Installation
+
+```bash
+npm install
+```
+
+## Run the Application
+
+```bash
+node server.js
+```
+
+Server URL:
+
+http://localhost:3000
+
+## Swagger Documentation
+
+Open the following URL in your browser:
+
+http://localhost:3000/api-docs
+
+## Available API Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | /tasks | Get all tasks |
+| POST | /tasks | Create a new task |
+| PUT | /tasks/{id} | Update a task |
+| DELETE | /tasks/{id} | Delete a task |
+
+## API Testing
+
+All task endpoints can be tested interactively through Swagger UI using the Try it out and Execute options.
+
+## Documentation Configuration
+
+- swagger.js contains the OpenAPI configuration.
+- routes/tasks.js contains JSDoc API definitions.
+- server.js serves the Swagger UI at /api-docs.
+
+## Storage
+
+Tasks are currently stored in memory and reset when the server restarts.

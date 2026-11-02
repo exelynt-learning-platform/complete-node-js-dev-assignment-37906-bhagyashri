@@ -8,6 +8,8 @@ const fs = require("fs");
 
 const tasksRouter = require("./routes/tasks");
 const usersRouter = require("./routes/users");
+const swaggerUi = require("swagger-ui-express");
+const swaggerSpec = require("./swagger");
 
 const app = express();
 
@@ -53,6 +55,12 @@ app.use(cors(corsOptions));
 
 // 4. Built-in middleware
 app.use(express.json());
+// Swagger API documentation
+app.use(
+    "/api-docs",
+    swaggerUi.serve,
+    swaggerUi.setup(swaggerSpec)
+);
 
 // 5. Serve static files and uploaded attachments
 app.use(express.static(path.join(__dirname, "public")));
